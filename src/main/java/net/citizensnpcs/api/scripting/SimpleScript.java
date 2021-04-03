@@ -13,8 +13,6 @@ public class SimpleScript implements Script {
     private final Bindings bindings;
     private final ScriptEngine engine;
     private final Invocable invocable;
-    @SuppressWarnings("unused")
-    private final Object root;
 
     public SimpleScript(CompiledScript src, ContextProvider[] providers) throws ScriptException {
         this.engine = src.getEngine();
@@ -22,7 +20,6 @@ public class SimpleScript implements Script {
         this.bindings = engine.createBindings();
         for (ContextProvider provider : providers)
             provider.provide(this);
-        this.root = src.eval(bindings);
     }
 
     @Override

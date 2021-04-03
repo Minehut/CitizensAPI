@@ -60,14 +60,7 @@ public class ScriptCompiler {
     private final Function<File, ScriptSource> fileEngineConverter = new Function<File, ScriptSource>() {
         @Override
         public ScriptSource apply(File file) {
-            if (!file.isFile())
-                return null;
-            String fileName = file.getName();
-            String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-            ScriptEngine engine = loadEngine(extension);
-            if (engine == null)
-                return null;
-            return new ScriptSource(file, engine);
+            return null;
         }
     };
     private final List<ContextProvider> globalContextProviders = Lists.newArrayList();
@@ -122,30 +115,7 @@ public class ScriptCompiler {
     }
 
     private ScriptEngine loadEngine(String extension) {
-        ScriptEngine engine = engines.get(extension);
-        if (engine != null)
-            return engine;
-        ScriptEngine search = null;
-        if (extension.equals("js") || extension.equals("javascript")) {
-            search = engineManager.getEngineByName("graal.js");
-            if (search == null) {
-                search = engineManager.getEngineByName("nashorn");
-            }
-        }
-        if (search == null) {
-            search = engineManager.getEngineByExtension(extension);
-        }
-        if (search != null && (!(search instanceof Compilable) || !(search instanceof Invocable))) {
-            search = null;
-        } else if (search != null) {
-            search = tryUpdateClassLoader(search);
-        }
-        engines.put(extension, search);
-        ClassLoader cl = classLoader.get();
-        if (cl != null) {
-            updateSunClassLoader(cl);
-        }
-        return search;
+        return null;
     }
 
     /**
@@ -185,7 +155,6 @@ public class ScriptCompiler {
         if (vars != null) {
             context.setBindings(new SimpleBindings(vars), ScriptContext.ENGINE_SCOPE);
         }
-        engine.eval(extension, context);
     }
 
     private ScriptEngine tryUpdateClassLoader(ScriptEngine search) {
